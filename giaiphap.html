@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Pháp - Tự Học THPT Số 1 Phù Cát</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        'cute-pink': '#FFE5E5',
+                        'cute-purple': '#E0CCFF',
+                        'cute-blue': '#D4F0F0',
+                        'cute-green': '#D1FAE5',
+                        'cute-yellow': '#FFF5CC',
+                        'primary': '#FF9999',
+                        'dark-text': '#5A4A4A',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(1deg)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            transition: background-color 0.5s ease, color 0.5s ease;
+            background-color: #FAFAFA;
+            color: #5A4A4A;
+        }
+
+        html.dark body {
+            background-color: #0f172a;
+            color: #F3F4F6;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(255, 153, 153, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-btn.active {
+            background-color: #FF9999;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(255, 153, 153, 0.5);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .solution-item {
+            transition: all 0.3s ease;
+        }
+
+        .solution-item:hover {
+            transform: translateX(8px);
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen pb-20 font-sans overflow-x-hidden text-dark-text dark:text-gray-100">
+
+    <!-- Ambient Decor -->
+    <div class="fixed top-0 left-0 w-96 h-96 bg-cute-pink/30 rounded-full blur-[100px] -z-10 animate-float"></div>
+    <div class="fixed bottom-0 right-0 w-80 h-80 bg-cute-blue/30 rounded-full blur-[100px] -z-10"
+        style="animation-delay: 2s;"></div>
+
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()"
+        class="fixed bottom-8 right-8 z-[60] bg-white dark:bg-slate-800 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-yellow-500 border-4 border-white dark:border-slate-700 hover:scale-110 active:scale-95 transition-all">
+        <i class="ph-fill ph-sun text-2xl dark:hidden"></i>
+        <i class="ph-fill ph-moon text-2xl text-blue-300 hidden dark:block"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="p-6 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass-card px-6 py-3 rounded-full">
+            <a href="index.html"
+                class="flex items-center gap-2 text-gray-500 dark:text-gray-300 hover:text-primary transition-colors font-bold group">
+                <i class="ph-bold ph-arrow-left group-hover:-translate-x-1 transition-transform"></i> Trang chủ
+            </a>
+            <div class="font-bold text-lg text-primary flex items-center gap-2">
+                <i class="ph-fill ph-lightbulb-filament"></i>
+                <span class="hidden sm:inline">Giải Pháp & Kiến Nghị</span>
+            </div>
+            <div class="w-20 hidden md:block"></div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="text-center px-4 pt-12 pb-16 reveal active">
+        <div class="max-w-4xl mx-auto">
+            <span
+                class="inline-block bg-white dark:bg-slate-800 text-primary text-[10px] font-black px-4 py-1.5 rounded-full shadow-sm mb-4 uppercase tracking-widest border border-primary/10">Đề
+                xuất dự án</span>
+            <h1 class="text-3xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Mô Hình <span class="text-primary">"Kiềng 3 Chân"</span>
+            </h1>
+            <p class="text-gray-500 dark:text-gray-400 text-lg md:text-xl leading-relaxed">
+                Giải pháp phối hợp đồng bộ giữa Học sinh - Nhà trường - Gia đình để tối ưu hóa năng lực tự học trong kỷ
+                nguyên số.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8">
+
+        <!-- Tab Navigation -->
+        <div class="flex flex-wrap justify-center gap-4 mb-16 reveal active">
+            <button onclick="switchTab('student')" id="tab-student"
+                class="tab-btn active glass-card px-10 py-4 rounded-full font-bold flex items-center gap-2 transition-all">
+                <i class="ph-fill ph-student text-xl"></i> Học Sinh
+            </button>
+            <button onclick="switchTab('school')" id="tab-school"
+                class="tab-btn glass-card px-10 py-4 rounded-full font-bold flex items-center gap-2 transition-all text-gray-500 dark:text-gray-400">
+                <i class="ph-fill ph-chalkboard-teacher text-xl"></i> Nhà Trường
+            </button>
+            <button onclick="switchTab('family')" id="tab-family"
+                class="tab-btn glass-card px-10 py-4 rounded-full font-bold flex items-center gap-2 transition-all text-gray-500 dark:text-gray-400">
+                <i class="ph-fill ph-house-line text-xl"></i> Gia Đình
+            </button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="min-h-[900px]">
+
+            <!-- 1. HỌC SINH SECTION -->
+            <div id="content-student" class="tab-content animate-fade-in block">
+                <div class="grid lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- Left: Vertical Solutions List -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <p class="text-gray-600 dark:text-gray-400 italic border-l-4 border-primary pl-4 mb-8 text-lg">
+                            "Học sinh cần chuyển từ thụ động sang chủ động, tự quản lý thời gian và tận dụng tài nguyên
+                            số để phát triển tư duy."
+                        </p>
+
+                        <!-- Box 1: SMART -->
+                        <div
+                            class="solution-item glass-card p-6 md:p-8 rounded-[2rem] flex flex-col sm:flex-row gap-6 items-center sm:items-start border-l-[8px] border-l-cyan-400">
+                            <div
+                                class="w-16 h-16 bg-cyan-100 dark:bg-cyan-900/40 rounded-2xl flex items-center justify-center text-cyan-600 shrink-0 shadow-sm">
+                                <i class="ph-fill ph-target text-4xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-bold mb-3">1. Thiết lập mục tiêu SMART</h3>
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                    Mục tiêu cần <strong>Cụ thể (Specific)</strong>, <strong>Đo lường được
+                                        (Measurable)</strong>, <strong>Khả thi (Achievable)</strong>, <strong>Thực tế
+                                        (Relevant)</strong> và <strong>Có thời hạn (Time-bound)</strong>. Thay vì nói
+                                    "Học giỏi Toán", hãy đặt mục tiêu "Hoàn thành 10 bài tập Hình học không gian mỗi tối
+                                    trong 1 tuần".
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Box 2: Time Management -->
+                        <div
+                            class="solution-item glass-card p-6 md:p-8 rounded-[2rem] flex flex-col sm:flex-row gap-6 items-center sm:items-start border-l-[8px] border-l-orange-400">
+                            <div
+                                class="w-16 h-16 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center text-orange-600 shrink-0 shadow-sm">
+                                <i class="ph-fill ph-clock-countdown text-4xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-bold mb-3">2. Quản lý thời gian khoa học</h3>
+                                <div class="text-gray-600 dark:text-gray-300 space-y-4 text-lg">
+                                    <p>• <strong>Pomodoro:</strong> Học 25 phút, nghỉ 5 phút để duy trì sự tập trung cao
+                                        độ, tránh mệt mỏi khi ngồi trước máy tính lâu.</p>
+                                    <p>• <strong>Ma trận Eisenhower:</strong> Phân loại công việc thành 4 nhóm (Quan
+                                        trọng/Khẩn cấp) để ưu tiên việc cần làm trước, tránh sa đà vào việc vô bổ.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Box 3: Digital Skills -->
+                        <div
+                            class="solution-item glass-card p-6 md:p-8 rounded-[2rem] flex flex-col sm:flex-row gap-6 items-center sm:items-start border-l-[8px] border-l-pink-400">
+                            <div
+                                class="w-16 h-16 bg-pink-100 dark:bg-pink-900/40 rounded-2xl flex items-center justify-center text-pink-600 shrink-0 shadow-sm">
+                                <i class="ph-fill ph-robot text-4xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-bold mb-3">3. Kỹ năng số & Tư duy phản biện</h3>
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                    Không chỉ biết tìm kiếm thông tin, học sinh cần biết <strong>đánh giá độ tin
+                                        cậy</strong> của nguồn tin (fake news vs. academic sources). Sử dụng AI
+                                    (ChatGPT, Gemini) như một trợ lý để gợi ý ý tưởng, không sao chép nguyên văn.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Box 4: Collaborative -->
+                        <div
+                            class="solution-item glass-card p-6 md:p-8 rounded-[2rem] flex flex-col sm:flex-row gap-6 items-center sm:items-start border-l-[8px] border-l-emerald-400">
+                            <div
+                                class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 rounded-2xl flex items-center justify-center text-emerald-600 shrink-0 shadow-sm">
+                                <i class="ph-fill ph-users-three text-4xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-bold mb-3">4. Học tập cộng tác (Collaborative)</h3>
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                    Tạo các nhóm học tập online (Zalo/Facebook/Discord) để chia sẻ tài liệu và thảo
+                                    luận. Việc giảng giải lại kiến thức cho bạn bè là cách ghi nhớ tốt nhất
+                                    (<strong>Tháp học tập</strong>: Hiệu quả lên đến 90%).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Sticky Product Card -->
+                    <div class="lg:col-span-5 lg:sticky lg:top-28">
+                        <div
+                            class="bg-gradient-to-br from-primary to-[#FF758C] p-8 md:p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
+                            <div class="relative z-10">
+                                <span
+                                    class="uppercase tracking-[0.3em] text-[10px] font-black opacity-80 mb-3 block text-white/90">Sản
+                                    phẩm dự án</span>
+                                <h3 class="text-4xl font-bold mb-6 leading-tight">H6 - PC1</h3>
+                                <p class="mb-8 opacity-90 text-lg leading-relaxed">
+                                    Giải pháp số hóa toàn diện giúp học sinh tiếp cận nguồn tài liệu đã được chọn lọc và
+                                    kiểm duyệt bởi giáo viên chuyên môn.
+                                </p>
+
+                                <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 mb-10">
+                                    <h4 class="font-bold mb-4 flex items-center gap-2"><i
+                                            class="ph-fill ph-sparkle text-yellow-300"></i> Tính năng nổi bật:</h4>
+                                    <ul class="space-y-4 text-sm font-medium">
+                                        <li class="flex items-start gap-3">
+                                            <i class="ph-bold ph-check text-green-300 mt-1"></i>
+                                            <span>Kho tài liệu mở (OER) phân loại theo môn học.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <i class="ph-bold ph-check text-green-300 mt-1"></i>
+                                            <span>Gợi ý lộ trình học tập cá nhân hóa bằng AI.</span>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <i class="ph-bold ph-check text-green-300 mt-1"></i>
+                                            <span>Trợ lí AI hỗ trợ học tập 24/7.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <a href="portal_tai_nguyen.html"
+                                    class="block w-full bg-white text-primary text-center py-5 rounded-2xl font-black shadow-xl hover:bg-gray-100 transition-all uppercase tracking-widest text-sm active:scale-95">
+                                    Trải nghiệm ngay <i class="ph-bold ph-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+
+                            <!-- Decor SVG -->
+                            <div class="absolute -bottom-10 -right-10 opacity-10 text-white">
+                                <svg width="250" height="250" viewBox="0 0 256 256" fill="currentColor">
+                                    <path
+                                        d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. NHÀ TRƯỜNG SECTION -->
+            <div id="content-school" class="tab-content animate-fade-in hidden">
+                <div class="max-w-6xl mx-auto space-y-12">
+                    <div class="text-center">
+                        <div
+                            class="w-20 h-20 bg-teal-100 dark:bg-teal-900/30 text-teal-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                            <i class="ph-fill ph-chalkboard-teacher text-4xl"></i>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold leading-tight">Vai Trò Nhà Trường & Giáo Viên</h2>
+                        <p class="text-gray-500 mt-2 text-lg">Chuyển dịch từ "người truyền thụ kiến thức" sang "người
+                            thiết kế và hướng dẫn".</p>
+                    </div>
+
+                    <div class="flex flex-col gap-8">
+                        <!-- Step 1 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-teal-400 flex flex-col md:flex-row gap-8 items-start">
+                            <div
+                                class="w-14 h-14 bg-teal-100 dark:bg-teal-900/40 rounded-2xl flex items-center justify-center text-teal-600 shrink-0 font-black text-2xl shadow-sm">
+                                1</div>
+                            <div>
+                                <h4 class="font-bold text-teal-800 dark:text-teal-400 mb-4 text-2xl">Đổi Mới Phương Pháp
+                                    Dạy Học</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    Áp dụng mô hình <strong>Lớp học đảo ngược (Flipped Classroom)</strong>: Học sinh tự
+                                    nghiên cứu tài liệu/video bài giảng ở nhà thông qua hệ thống học liệu số, thời gian
+                                    trên lớp dành cho thảo luận sâu và giải quyết vấn đề thực tiễn. Tăng cường dạy học
+                                    dự án (Project-based Learning).
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Step 2 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-teal-400 flex flex-col md:flex-row gap-8 items-start">
+                            <div
+                                class="w-14 h-14 bg-teal-100 dark:bg-teal-900/40 rounded-2xl flex items-center justify-center text-teal-600 shrink-0 font-black text-2xl shadow-sm">
+                                2</div>
+                            <div>
+                                <h4 class="font-bold text-teal-800 dark:text-teal-400 mb-4 text-2xl">Chuyển Đổi Số Giáo
+                                    Dục</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    Xây dựng <strong>Thư viện số</strong> của trường với các nguồn học liệu mở chuẩn
+                                    xác. Sử dụng triệt để các nền tảng LMS (như <strong>Azota, Shub Classroom, Google
+                                        Classroom</strong>) để giao nhiệm vụ tự học, thực hiện kiểm tra đánh giá thường
+                                    xuyên và cung cấp phản hồi tức thì cho học sinh.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Step 3 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-teal-400 flex flex-col md:flex-row gap-8 items-start">
+                            <div
+                                class="w-14 h-14 bg-teal-100 dark:bg-teal-900/40 rounded-2xl flex items-center justify-center text-teal-600 shrink-0 font-black text-2xl shadow-sm">
+                                3</div>
+                            <div>
+                                <h4 class="font-bold text-teal-800 dark:text-teal-400 mb-4 text-2xl">Tạo Môi Trường Văn
+                                    Hóa Tự Học</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                                    Tổ chức các cuộc thi <strong>Nghiên cứu khoa học</strong>, CLB Sách và Hành động để
+                                    khơi gợi niềm đam mê tri thức. Vinh danh các tấm gương tự học tiêu biểu thông qua
+                                    danh hiệu <strong>"Ngôi sao tự học"</strong> hàng tháng để lan tỏa động lực mạnh mẽ.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. GIA ĐÌNH SECTION -->
+            <div id="content-family" class="tab-content animate-fade-in hidden">
+                <div class="max-w-6xl mx-auto space-y-12">
+                    <div class="text-center">
+                        <div
+                            class="w-20 h-20 bg-orange-100 dark:bg-orange-900/30 text-orange-500 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                            <i class="ph-fill ph-house-line text-4xl"></i>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold leading-tight">Gia Đình: Điểm Tựa & Người Đồng Hành
+                        </h2>
+                        <p class="text-gray-500 mt-2 text-lg">Phụ huynh cần thay đổi tư duy: Từ "giám sát, kiểm soát"
+                            sang "thấu hiểu và hỗ trợ".</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Box 1 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-orange-400 flex flex-col gap-6 items-start">
+                            <div
+                                class="w-14 h-14 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center text-orange-600 shrink-0">
+                                <i class="ph-fill ph-armchair text-3xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl md:text-2xl mb-3">Môi trường vật lý & tinh thần</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">Thiết kế góc học tập
+                                    yên tĩnh, đủ ánh sáng. Quan trọng hơn là tạo không khí gia đình hòa thuận. Tránh tạo
+                                    áp lực điểm số quá lớn khiến con chán nản. Hạn chế tiếng ồn từ TV/MXH trong giờ tự
+                                    học của con.</p>
+                            </div>
+                        </div>
+                        <!-- Box 2 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-orange-400 flex flex-col gap-6 items-start">
+                            <div
+                                class="w-14 h-14 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center text-orange-600 shrink-0">
+                                <i class="ph-fill ph-hand-heart text-3xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl md:text-2xl mb-3">Đồng hành số (Digital Parenting)</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">Phụ huynh cần trang
+                                    bị kỹ năng số cơ bản để hiểu con đang học gì trên mạng. Hướng dẫn con sử dụng
+                                    Internet an toàn thay vì cấm đoán cực đoan. Cài đặt các phần mềm hỗ trợ học tập và
+                                    đồng hành cùng con.</p>
+                            </div>
+                        </div>
+                        <!-- Box 3 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-orange-400 flex flex-col gap-6 items-start">
+                            <div
+                                class="w-14 h-14 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center text-orange-600 shrink-0">
+                                <i class="ph-fill ph-chat-circle-dots text-3xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl md:text-2xl mb-3">Kết nối chặt chẽ với Nhà trường</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">Chủ động trao đổi
+                                    với GVCN để nắm bắt kịp thời những khó khăn về tâm lý hay kiến thức của con. Tham
+                                    gia tích cực các buổi hội thảo phương pháp nuôi dạy con kỷ nguyên số do nhà trường
+                                    tổ chức.</p>
+                            </div>
+                        </div>
+                        <!-- Box 4 -->
+                        <div
+                            class="solution-item glass-card p-8 rounded-[2.5rem] border-l-[8px] border-l-orange-400 flex flex-col gap-6 items-start">
+                            <div
+                                class="w-14 h-14 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center text-orange-600 shrink-0">
+                                <i class="ph-fill ph-trophy text-3xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl md:text-2xl mb-3">Khích lệ & Công nhận quá trình</h4>
+                                <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">Ghi nhận sự nỗ lực
+                                    (effort) của con hơn là chỉ nhìn vào kết quả (outcome) cuối cùng. Những lời động
+                                    viên đúng lúc là liều thuốc tinh thần tốt nhất giúp con vượt qua áp lực và giữ vững
+                                    ngọn lửa tự học.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Action Checklist -->
+        <section class="mt-24 reveal active">
+            <div
+                class="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-[3rem] p-10 shadow-2xl border-4 border-primary/20 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <i class="ph-fill ph-check-square-offset text-9xl text-primary"></i>
+                </div>
+                <h2
+                    class="text-3xl font-bold mb-10 text-center dark:text-white flex items-center justify-center gap-3 leading-tight">
+                    Checklist Hành Động Ngay <i class="ph-fill ph-rocket text-primary animate-bounce"></i></h2>
+                <div class="space-y-4">
+                    <label
+                        class="flex items-center gap-5 p-6 rounded-[2rem] hover:bg-gray-50 dark:hover:bg-slate-700/50 cursor-pointer transition-all border-2 border-transparent hover:border-primary/20 group">
+                        <input type="checkbox"
+                            class="w-8 h-8 rounded-xl border-2 border-primary text-primary focus:ring-primary cursor-pointer">
+                        <span
+                            class="text-lg font-bold dark:text-gray-200 group-hover:text-primary transition-colors leading-tight">Lập
+                            kế hoạch học tập (To-do list) chi tiết cho tuần tới ngay bây giờ</span>
+                    </label>
+                    <label
+                        class="flex items-center gap-5 p-6 rounded-[2rem] hover:bg-gray-50 dark:hover:bg-slate-700/50 cursor-pointer transition-all group border border-transparent hover:border-primary/20">
+                        <input type="checkbox"
+                            class="w-8 h-8 rounded-xl border-2 border-primary text-primary focus:ring-primary cursor-pointer">
+                        <span
+                            class="text-lg font-bold dark:text-gray-200 group-hover:text-primary transition-colors leading-tight">Dọn
+                            dẹp góc học tập và tắt thông báo điện thoại</span>
+                    </label>
+                    <label
+                        class="flex items-center gap-5 p-6 rounded-[2rem] hover:bg-gray-50 dark:hover:bg-slate-700/50 cursor-pointer transition-all group border border-transparent hover:border-primary/20">
+                        <input type="checkbox"
+                            class="w-8 h-8 rounded-xl border-2 border-primary text-primary focus:ring-primary cursor-pointer">
+                        <span
+                            class="text-lg font-bold dark:text-gray-200 group-hover:text-primary transition-colors leading-tight">Khám
+                            phá kho tài liệu và trợ lí AI trên Portal H6-PC1</span>
+                    </label>
+                </div>
+                <div class="mt-12 text-center">
+                    <button
+                        class="bg-primary text-white px-16 py-5 rounded-[1.5rem] font-black shadow-xl hover:bg-red-400 transition-all hover:scale-105 uppercase tracking-widest text-sm">
+                        Tôi cam kết thực hiện! 🚀
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center mt-24 text-gray-400 dark:text-gray-600 text-sm pb-10">
+        <div class="flex justify-center items-center gap-2 mb-4">
+            <i class="ph-fill ph-student text-2xl text-primary"></i>
+            <span class="font-bold text-slate-800 dark:text-white uppercase tracking-wider">THPT Số 1 Phù Cát</span>
+        </div>
+        <p class="mt-1">H6 - Lễ hội công nghệ</p>
+    </footer>
+
+    <script>
+        // --- 1. Dark Mode Logic ---
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // --- 2. Tab Switching Logic ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-primary', 'text-white');
+                btn.classList.add('text-gray-500', 'dark:text-gray-400');
+            });
+
+            const activeContent = document.getElementById('content-' + tabName);
+            activeContent.classList.remove('hidden');
+
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-gray-500', 'dark:text-gray-400');
+        }
+
+        // --- 3. Scroll Reveal ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>

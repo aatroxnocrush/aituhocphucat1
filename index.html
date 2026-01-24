@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tự Học PC1 - Kỷ Nguyên Số | THPT Số 1 Phù Cát</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        'cute-pink': '#FFE5E5',
+                        'cute-purple': '#E0CCFF',
+                        'cute-blue': '#D4F0F0',
+                        'cute-yellow': '#FFF5CC',
+                        'primary': '#FF9999',
+                        'dark-text': '#5A4A4A',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(2deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            transition: background-color 0.5s ease, color 0.5s ease;
+            background-color: #FAFAFA;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html.dark body {
+            background-color: #0f172a;
+            color: #F3F4F6;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(255, 153, 153, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        html.dark .blob {
+            opacity: 0.2;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #FF9999 0%, #FF758C 100%);
+        }
+
+        .nav-scrolled {
+            padding-top: 0.4rem !important;
+            padding-bottom: 0.4rem !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        html.dark .nav-scrolled {
+            background: rgba(15, 23, 42, 0.95) !important;
+        }
+
+        .hero-title {
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        /* Custom Scrollbar for AI Chat */
+        #ai-response::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #ai-response::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #ai-response::-webkit-scrollbar-thumb {
+            background: #FF9999;
+            border-radius: 10px;
+        }
+
+        /* Responsive AI Hub Height for small mobiles */
+        @media (max-height: 700px) {
+            #ai-hub-modal .glass-card {
+                max-height: 95vh;
+            }
+
+            #ai-input {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body class="overflow-x-hidden relative text-dark-text dark:text-gray-100 font-sans">
+
+    <!-- Background Decoration -->
+    <div class="blob bg-cute-pink w-64 h-64 sm:w-96 sm:h-96 rounded-full top-0 left-0 animate-float"></div>
+    <div class="blob bg-cute-blue w-64 h-64 sm:w-80 sm:h-80 rounded-full bottom-0 right-0 animate-float"
+        style="animation-delay: 2s;"></div>
+    <div
+        class="blob bg-cute-purple w-48 h-48 sm:w-64 sm:h-64 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-30">
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 p-2 sm:p-4 transition-all duration-500" id="navbar">
+        <div
+            class="max-w-7xl mx-auto glass-card rounded-2xl sm:rounded-full px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
+            <a href="#" class="text-lg sm:text-2xl font-bold text-primary flex items-center gap-2">
+                <i class="ph-fill ph-student text-2xl sm:text-3xl"></i>
+                <span class="hidden xs:inline">Tự Học PC1</span>
+            </a>
+
+            <div class="hidden lg:flex space-x-6 font-bold dark:text-gray-200 text-sm">
+                <a href="#intro" class="hover:text-primary transition-colors">Giới thiệu</a>
+                <a href="#status" class="hover:text-primary transition-colors">Thực trạng</a>
+                <a href="#solutions" class="hover:text-primary transition-colors">Giải pháp</a>
+                <a href="#website" class="hover:text-primary transition-colors">Hệ sinh thái</a>
+                <a href="portal_tai_nguyen.html" class="hover:text-primary transition-colors">Portal</a>
+            </div>
+
+            <a href="portal_tai_nguyen.html"
+                class="bg-primary text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-black hover:bg-red-400 transition-all hover:scale-105 shadow-lg shadow-red-200/50 uppercase text-[9px] sm:text-[10px] tracking-wider shrink-0">
+                Portal
+            </a>
+        </div>
+    </nav>
+
+    <!-- Music Player Controls (Left Side) -->
+    <div id="youtube-player" class="hidden"></div>
+    <div class="fixed bottom-6 left-6 sm:bottom-8 sm:left-8 z-50 flex flex-col gap-2 items-start">
+        <button id="music-toggle" onclick="toggleMusic()"
+            class="bg-white dark:bg-slate-800 w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl border-4 border-white dark:border-slate-700 flex items-center justify-center text-primary hover:scale-110 active:scale-95 transition-all group relative">
+            <i id="icon-play" class="ph-fill ph-play text-xl sm:text-2xl ml-1"></i>
+            <i id="icon-pause" class="ph-fill ph-pause text-xl sm:text-2xl hidden"></i>
+            <div id="vinyl" class="absolute inset-0 border-2 border-dashed border-primary/30 rounded-full hidden"></div>
+        </button>
+    </div>
+
+    <!-- Gemini AI Hub Button (Right Side Above Theme Toggle) -->
+    <div class="fixed bottom-20 right-6 sm:bottom-24 sm:right-8 z-50">
+        <button onclick="toggleAIHub()"
+            class="bg-primary text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl border-4 border-white dark:border-slate-700 flex items-center justify-center hover:scale-110 active:scale-95 transition-all relative group">
+            <i class="ph-fill ph-sparkle text-xl sm:text-2xl"></i>
+            <span
+                class="absolute right-16 bg-white dark:bg-slate-800 text-primary dark:text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl opacity-0 lg:group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-primary/20">✨
+                Trợ lý & Tư vấn AI</span>
+        </button>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <button onclick="toggleTheme()"
+        class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 bg-white dark:bg-slate-800 w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl border-4 border-white dark:border-slate-700 flex items-center justify-center text-yellow-500 hover:scale-110 active:scale-95 transition-all">
+        <i class="ph-fill ph-sun text-xl sm:text-2xl dark:hidden"></i>
+        <i class="ph-fill ph-moon text-xl sm:text-2xl text-blue-300 hidden dark:block"></i>
+    </button>
+
+    <!-- AI Hub Modal -->
+    <div id="ai-hub-modal"
+        class="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 bg-black/40 backdrop-blur-sm hidden">
+        <div
+            class="glass-card w-full max-w-2xl rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+            <div class="p-4 sm:p-6 bg-primary text-white flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <i class="ph-fill ph-chat-circle-dots text-xl sm:text-2xl"></i>
+                    <h3 class="font-black uppercase tracking-widest text-xs sm:text-sm">H6-Chatbot ✨</h3>
+                </div>
+                <button onclick="toggleAIHub()" class="hover:rotate-90 transition-transform p-1">
+                    <i class="ph-bold ph-x text-xl sm:text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-8 flex flex-col gap-4 sm:gap-6 overflow-hidden">
+                <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 font-semibold">Chào cậu! Tớ là
+                    H6-Chatbot,
+                    tớ ở đây để lắng nghe cậu tâm sự và giúp cậu học tập tốt hơn. ❤️</p>
+
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="askAI('Lập lộ trình tự học môn Toán lớp 10 bứt phá trong 1 tháng')"
+                        class="bg-cute-pink/50 dark:bg-pink-900/20 text-primary dark:text-pink-300 px-3 py-1.5 rounded-full text-[9px] sm:text-[10px] font-bold hover:bg-primary hover:text-white transition-all uppercase tracking-wider">✨
+                        Toán 10</button>
+                    <button
+                        onclick="askAI('Mình cảm thấy stress quá vì áp lực thi cử sắp tới, hãy cho mình lời khuyên')"
+                        class="bg-red-100 dark:bg-red-900/20 text-red-500 dark:text-red-300 px-3 py-1.5 rounded-full text-[9px] sm:text-[10px] font-bold hover:bg-red-500 hover:text-white transition-all uppercase tracking-wider">🌈
+                        Stress</button>
+                    <button onclick="askAI('Cách cân bằng giữa việc học và các mối quan hệ bạn bè/gia đình?')"
+                        class="bg-cute-blue/50 dark:bg-blue-900/20 text-teal-600 dark:text-teal-300 px-3 py-1.5 rounded-full text-[9px] sm:text-[10px] font-bold hover:bg-teal-500 hover:text-white transition-all uppercase tracking-wider">🤝
+                        Cân bằng</button>
+                </div>
+
+                <div class="relative">
+                    <textarea id="ai-input"
+                        placeholder="Cậu muốn lập lộ trình hay cần tâm sự? Nhập tại đây nhé... (Nhấn Enter để gửi)"
+                        class="w-full bg-white dark:bg-slate-800 border-2 border-primary/20 rounded-2xl p-4 text-sm sm:text-base focus:outline-none focus:border-primary transition-all resize-none h-20 sm:h-24 dark:text-white shadow-sm font-medium"></textarea>
+                    <button id="send-btn" onclick="askAI()"
+                        class="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 bg-primary text-white p-2 rounded-xl hover:scale-110 active:scale-95 transition-all shadow-lg">
+                        <i class="ph-bold ph-paper-plane-right text-lg sm:text-xl"></i>
+                    </button>
+                </div>
+
+                <div id="ai-response-container" class="hidden flex-1 overflow-hidden flex flex-col min-h-0">
+                    <div
+                        class="flex items-center gap-2 mb-2 text-primary font-bold text-[10px] sm:text-[11px] uppercase tracking-[0.2em]">
+                        <i class="ph-fill ph-heart"></i> Phản hồi từ H6-Chatbot
+                    </div>
+                    <div id="ai-response"
+                        class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 overflow-y-auto text-sm sm:text-base leading-relaxed text-slate-800 dark:text-gray-100 border border-primary/10 shadow-inner scroll-smooth font-medium">
+                        Đang lắng nghe cậu...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header id="intro"
+        class="min-h-screen flex items-center justify-center pt-24 sm:pt-28 lg:pt-20 px-4 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+            <div class="space-y-6 sm:space-y-8 text-center lg:text-left order-2 lg:order-1">
+                <div
+                    class="inline-block bg-white dark:bg-slate-800 text-primary px-4 py-1.5 rounded-full font-black shadow-sm border border-primary/10 uppercase text-[9px] sm:text-[10px] tracking-[0.2em]">
+                    ✨ Cuộc thi lễ hội công nghệ 2026
+                </div>
+
+                <h1
+                    class="hero-title text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-slate-800 dark:text-white">
+                    Nâng Cao Năng Lực <br class="hidden sm:block">
+                    <span class="text-primary italic">Tự Học</span> <br class="hidden sm:block">
+                    Trong Kỷ Nguyên Số
+                </h1>
+
+                <p
+                    class="text-sm sm:text-lg text-gray-500 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto lg:mx-0 px-2 sm:px-0">
+                    Xây dựng lộ trình học tập chủ động và trang bị bộ công cụ số hiện đại dành riêng cho học sinh trường
+                    <strong class="text-slate-700 dark:text-gray-300">THPT Số 1 Phù Cát</strong>.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+                    <a href="#status"
+                        class="hero-gradient text-white px-8 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg hover:scale-105 transition-all shadow-xl shadow-red-200 dark:shadow-none text-center">
+                        Xem thực trạng
+                    </a>
+                    <a href="giaiphap.html"
+                        class="bg-white dark:bg-transparent dark:text-white text-primary border-2 border-primary px-8 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg hover:bg-pink-50 dark:hover:bg-primary/10 transition-all text-center">
+                        Giải pháp
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Image Frame -->
+            <div
+                class="relative group w-full max-w-[280px] xs:max-w-sm sm:max-w-lg lg:max-w-xl mx-auto order-1 lg:order-2">
+                <div
+                    class="absolute inset-0 bg-cute-yellow rounded-[2rem] sm:rounded-[3rem] transform rotate-6 transition-transform lg:group-hover:rotate-3 shadow-xl">
+                </div>
+                <div class="relative bg-white dark:bg-slate-800 p-2 sm:p-4 rounded-[2rem] sm:rounded-[3rem] shadow-2xl border-2 border-white/50 dark:border-slate-700 overflow-hidden aspect-square flex items-center justify-center bg-cover bg-center"
+                    style="background-image: url('1.png');">
+                    <div class="absolute inset-0 bg-black/5"></div>
+                    <div
+                        class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white/90 dark:bg-slate-900/90 px-3 sm:px-5 py-2 sm:py-3 rounded-xl sm:rounded-2xl text-[10px] sm:text-sm font-bold backdrop-blur-md shadow-lg text-dark-text dark:text-white border border-white/50">
+                        🏫 THPT Số 1 Phù Cát
+                    </div>
+                </div>
+                <i
+                    class="ph-fill ph-sparkle text-4xl sm:text-6xl text-yellow-400 absolute -top-4 -right-4 sm:-top-8 sm:-right-8 animate-pulse"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Current Status -->
+    <section id="status" class="py-16 sm:py-24 px-4 bg-white/30 dark:bg-slate-900/30">
+        <div class="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 dark:text-white leading-tight">Thực
+                Trạng
+                <span class="text-primary italic">Khủng Hoảng</span> Mục Tiêu
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 text-sm sm:text-lg px-4 leading-relaxed">Phần lớn học sinh đang
+                gặp khó khăn trong việc định hướng hành trình học tập.</p>
+        </div>
+
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div
+                class="glass-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] text-center lg:hover:-translate-y-2 transition-all duration-300">
+                <div
+                    class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-cute-yellow dark:bg-yellow-900/40 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-6 sm:mb-8">
+                    <i class="ph-fill ph-compass text-3xl sm:text-4xl text-orange-500"></i>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 dark:text-white">Mất Định Hướng</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Chưa xác định được mục
+                    đích rõ ràng, học tập mang tính đối phó.</p>
+            </div>
+            <div
+                class="glass-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] text-center lg:hover:-translate-y-2 transition-all duration-300 border-primary/30 border-2">
+                <div
+                    class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-cute-pink dark:bg-pink-900/40 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-6 sm:mb-8">
+                    <i class="ph-fill ph-warning-circle text-3xl sm:text-4xl text-primary"></i>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 dark:text-white">Mất Hứng Thú</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Cảm thấy nhàm chán khi
+                    thiếu phương pháp và động lực tự thân.</p>
+            </div>
+            <div
+                class="glass-card p-8 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] text-center lg:hover:-translate-y-2 transition-all duration-300">
+                <div
+                    class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-cute-blue dark:bg-blue-900/40 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-6 sm:mb-8">
+                    <i class="ph-fill ph-monitor text-3xl sm:text-4xl text-teal-600"></i>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 dark:text-white">Kỹ Năng Khai Thác</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Có thiết bị nhưng chưa
+                    biết cách tìm kiếm tài liệu chuẩn.</p>
+            </div>
+        </div>
+        <div class="mt-12 sm:mt-16 text-center">
+            <a href="thuctrang.html"
+                class="inline-flex items-center gap-2 sm:gap-3 bg-white dark:bg-slate-800 border-2 sm:border-4 border-white dark:border-slate-700 text-primary px-8 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-[1.5rem] font-black shadow-xl lg:hover:scale-105 transition-all group text-xs sm:text-sm uppercase">
+                Xem báo cáo chi tiết <i
+                    class="ph-bold ph-arrow-right lg:group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Section 2: Solutions -->
+    <section id="solutions" class="py-16 sm:py-24 px-4 bg-white dark:bg-slate-900/50 sm:rounded-[4rem]">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 sm:mb-16 gap-4">
+                <div class="text-center md:text-left">
+                    <span class="text-primary font-black uppercase text-[10px] tracking-widest mb-2 block">Bí quyết bứt
+                        phá</span>
+                    <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold dark:text-white leading-tight">Cẩm Nang
+                        <span class="text-primary">Tự Học</span> 🎒
+                    </h2>
+                </div>
+                <p
+                    class="text-gray-500 dark:text-gray-400 text-center md:text-right text-xs sm:text-sm max-w-sm font-medium">
+                    Trang bị tư duy công dân toàn cầu để làm chủ tri thức nhân loại.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <div
+                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] bg-cute-pink/30 dark:bg-pink-900/20 lg:hover:bg-cute-pink/50 transition-all border border-transparent lg:hover:border-primary/20">
+                    <div
+                        class="shrink-0 bg-white dark:bg-gray-800 w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md text-pink-500">
+                        <i class="ph-bold ph-magnifying-glass text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Chủ Động Tìm Kiếm</h3>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Không chờ đợi chỉ dạy. Hãy tò mò "tại sao" qua sách, khóa học online và video chuẩn.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] bg-cute-purple/30 dark:bg-purple-900/20 lg:hover:bg-cute-purple/50 transition-all border border-transparent lg:hover:border-primary/20">
+                    <div
+                        class="shrink-0 bg-white dark:bg-slate-800 w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md text-purple-500">
+                        <i class="ph-bold ph-target text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Xác Định Mục Tiêu</h3>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Know mình học để làm gì. Đặt kế hoạch <strong>SMART</strong> để bám sát lộ trình.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] bg-cute-blue/40 dark:bg-cyan-900/20 lg:hover:bg-cute-blue/60 transition-all border border-transparent lg:hover:border-primary/20">
+                    <div
+                        class="shrink-0 bg-white dark:bg-slate-800 w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md text-teal-600">
+                        <i class="ph-bold ph-strategy text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Phương Pháp Phù Hợp</h3>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Kết hợp <strong>Pomodoro</strong>, ghi chép <strong>Cornell</strong> để tối ưu hiệu quả ghi
+                            nhớ.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] bg-cute-yellow/50 dark:bg-yellow-900/20 lg:hover:bg-cute-yellow/70 transition-all border border-transparent lg:hover:border-primary/20">
+                    <div
+                        class="shrink-0 bg-white dark:bg-slate-800 w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md text-orange-500">
+                        <i class="ph-bold ph-users-three text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 dark:text-white">Kết Nối & Chia Sẻ</h3>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                            Tham gia thảo luận. Giảng lại kiến thức cho bạn bè để ghi nhớ bền vững tới 90%.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: H6-PC1 Ecosystem -->
+    <section id="website" class="py-16 sm:py-24 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div
+                class="bg-gradient-to-br from-cute-blue via-white to-white dark:from-slate-800 dark:via-slate-900 dark:to-slate-900 rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl p-6 sm:p-12 md:p-16 border-4 border-white dark:border-slate-700 relative overflow-hidden">
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                        <span class="text-primary font-black uppercase text-[10px] tracking-widest mb-4 block">Hệ sinh
+                            thái số</span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold mb-6 sm:mb-8 leading-tight dark:text-white">Nền
+                            Tảng <br><span class="text-primary">H6 - PC1</span></h2>
+                        <ul class="space-y-4 sm:space-y-5 mb-10 sm:mb-12 text-left inline-block">
+                            <li class="flex items-center gap-3 sm:gap-4">
+                                <div
+                                    class="w-8 h-8 sm:w-10 sm:h-10 bg-white dark:bg-slate-700 rounded-lg sm:rounded-xl flex items-center justify-center text-green-500 shadow-sm shrink-0">
+                                    <i class="ph-fill ph-check-circle text-lg sm:text-xl"></i>
+                                </div>
+                                <span class="font-bold text-xs sm:text-base">Kho tài liệu OER chọn lọc.</span>
+                            </li>
+                            <li class="flex items-center gap-3 sm:gap-4">
+                                <div
+                                    class="w-8 h-8 sm:w-10 sm:h-10 bg-white dark:bg-slate-700 rounded-lg sm:rounded-xl flex items-center justify-center text-green-500 shadow-sm shrink-0">
+                                    <i class="ph-fill ph-check-circle text-lg sm:text-xl"></i>
+                                </div>
+                                <span class="font-bold text-xs sm:text-base text-primary">✨ Trợ lý tâm lý học đường
+                                    AI.</span>
+                            </li>
+                            <li class="flex items-center gap-3 sm:gap-4">
+                                <div
+                                    class="w-8 h-8 sm:w-10 sm:h-10 bg-white dark:bg-slate-700 rounded-lg sm:rounded-xl flex items-center justify-center text-green-500 shadow-sm shrink-0">
+                                    <i class="ph-fill ph-check-circle text-lg sm:text-xl"></i>
+                                </div>
+                                <span class="font-bold text-xs sm:text-base">Lộ trình học cá nhân hóa.</span>
+                            </li>
+                        </ul>
+                        <button onclick="toggleAIHub()"
+                            class="inline-flex items-center justify-center gap-3 bg-primary text-white px-8 sm:px-12 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-black shadow-xl lg:hover:bg-red-400 transition-all uppercase text-[11px] sm:text-sm tracking-widest w-full sm:w-auto">
+                            Hỏi đáp & Tâm sự ✨ <i class="ph-bold ph-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="hidden md:block relative">
+                        <div
+                            class="glass-card p-4 rounded-[2.5rem] shadow-2xl relative z-10 border-4 border-white/80 dark:border-slate-600 transform rotate-2 lg:hover:rotate-0 transition-all duration-700">
+                            <div
+                                class="bg-gray-100 dark:bg-slate-800 rounded-[1.8rem] overflow-hidden aspect-video flex items-center justify-center border-2 border-gray-50 dark:border-slate-700">
+                                <div class="text-center p-8">
+                                    <i
+                                        class="ph-duotone ph-sparkle text-5xl sm:text-7xl text-primary mb-4 animate-pulse"></i>
+                                    <p
+                                        class="font-black text-lg sm:text-xl text-slate-800 dark:text-white uppercase tracking-wider">
+                                        H6 - PC1 AI Hub</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: YouTube Channels (Full Restoration) -->
+    <section id="youtube-channels" class="py-16 sm:py-24 px-4 bg-cute-pink/10 dark:bg-slate-900/50">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="mb-12 sm:mb-16">
+                <span class="text-primary font-black uppercase text-[10px] tracking-widest mb-4 block">Tài Nguyên Bổ
+                    Trợ</span>
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold dark:text-white leading-tight">Kênh Youtube
+                    Truyền Cảm Hứng 📺</h2>
+            </div>
+            <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                <!-- Beyond Limits -->
+                <a href="https://www.youtube.com/@BeyondLimitsSpi" target="_blank"
+                    class="group bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] shadow-sm lg:hover:shadow-2xl lg:hover:-translate-y-2 transition-all duration-300 flex flex-col items-center border border-primary/5">
+                    <div
+                        class="w-16 h-16 sm:w-20 sm:h-20 bg-cute-purple dark:bg-purple-900/50 rounded-2xl flex items-center justify-center text-purple-600 mb-6 lg:group-hover:scale-110 transition-transform shadow-inner shrink-0">
+                        <i class="ph-fill ph-brain text-3xl sm:text-4xl"></i>
+                    </div>
+                    <h3
+                        class="font-bold text-base sm:text-lg dark:text-white lg:group-hover:text-purple-600 transition-colors">
+                        Beyond Limits</h3>
+                    <p class="text-[10px] sm:text-xs text-gray-500 mt-3 leading-relaxed">Phát triển tư duy, kỷ luật và
+                        động lực học tập.</p>
+                </a>
+                <!-- Emilyne -->
+                <a href="https://www.youtube.com/@emilyne" target="_blank"
+                    class="group bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] shadow-sm lg:hover:shadow-2xl lg:hover:-translate-y-2 transition-all duration-300 flex flex-col items-center border border-primary/5">
+                    <div
+                        class="w-16 h-16 sm:w-20 sm:h-20 bg-cute-pink dark:bg-pink-900/50 rounded-2xl flex items-center justify-center text-pink-500 mb-6 lg:group-hover:scale-110 transition-transform shadow-inner shrink-0">
+                        <i class="ph-fill ph-coffee text-3xl sm:text-4xl"></i>
+                    </div>
+                    <h3
+                        class="font-bold text-base sm:text-lg dark:text-white lg:group-hover:text-pink-600 transition-colors">
+                        Emilyne</h3>
+                    <p class="text-[10px] sm:text-xs text-gray-500 mt-3 leading-relaxed">Vlog học tập nhẹ nhàng, chia sẻ
+                        lifestyle tích cực.</p>
+                </a>
+                <!-- Jellyyyday -->
+                <a href="https://www.youtube.com/@jellyyyday" target="_blank"
+                    class="group bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] shadow-sm lg:hover:shadow-2xl lg:hover:-translate-y-2 transition-all duration-300 flex flex-col items-center border border-primary/5">
+                    <div
+                        class="w-16 h-16 sm:w-20 sm:h-20 bg-cute-yellow dark:bg-yellow-900/50 rounded-2xl flex items-center justify-center text-orange-500 mb-6 lg:group-hover:scale-110 transition-transform shadow-inner shrink-0">
+                        <i class="ph-fill ph-sparkle text-3xl sm:text-4xl"></i>
+                    </div>
+                    <h3
+                        class="font-bold text-base sm:text-lg dark:text-white lg:group-hover:text-orange-500 transition-colors">
+                        Jellyyyday</h3>
+                    <p class="text-[10px] sm:text-xs text-gray-500 mt-3 leading-relaxed">Study With Me, ghi chép sáng
+                        tạo cực chill.</p>
+                </a>
+                <!-- Bacademy -->
+                <a href="https://www.youtube.com/@Bacademy-onthivao10ieltssat" target="_blank"
+                    class="group bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] shadow-sm lg:hover:shadow-2xl lg:hover:-translate-y-2 transition-all duration-300 flex flex-col items-center border border-primary/5">
+                    <div
+                        class="w-16 h-16 sm:w-20 sm:h-20 bg-cute-blue dark:bg-blue-900/50 rounded-2xl flex items-center justify-center text-teal-600 mb-6 lg:group-hover:scale-110 transition-transform shadow-inner shrink-0">
+                        <i class="ph-fill ph-graduation-cap text-3xl sm:text-4xl"></i>
+                    </div>
+                    <h3
+                        class="font-bold text-base sm:text-lg dark:text-white lg:group-hover:text-teal-600 transition-colors">
+                        Bacademy</h3>
+                    <p class="text-[10px] sm:text-xs text-gray-500 mt-3 leading-relaxed">Ôn thi IELTS & SAT chuyên sâu.
+                    </p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Community -->
+    <section id="community" class="py-16 sm:py-24 px-4 bg-[#FFFAF0] dark:bg-slate-900/30">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 dark:text-white leading-tight">Đừng
+                Học
+                <span class="text-primary italic">Một Mình</span>! 🤝
+            </h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-10 sm:mb-12 text-sm sm:text-lg">Tham gia cộng đồng để cùng
+                nhau tiến bộ.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
+                <div
+                    class="bg-white dark:bg-slate-800 p-8 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] shadow-sm border border-gray-100 dark:border-slate-700">
+                    <i class="ph-fill ph-chats-circle text-4xl sm:text-5xl text-primary mb-6"></i>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-4 dark:text-white">Diễn Đàn Thảo Luận</h3>
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">Nơi đặt câu hỏi
+                        và nhận câu trả lời từ cộng đồng học sinh Số 1 Phù Cát.</p>
+                    <button
+                        class="w-full bg-gray-100 dark:bg-slate-700 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold hover:bg-primary hover:text-white transition-all active:scale-95 text-sm">Tham
+                        gia ngay</button>
+                </div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-8 sm:p-10 rounded-[2rem] sm:rounded-[3.5rem] shadow-sm border border-gray-100 dark:border-slate-700">
+                    <i class="ph-fill ph-user-circle text-4xl sm:text-5xl text-blue-400 mb-6"></i>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-4 dark:text-white">Gặp Gỡ Cố Vấn</h3>
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">Kết nối trực
+                        tiếp với đội ngũ dự án H6-PC1 để nhận hỗ trợ phương pháp.</p>
+                    <button
+                        class="w-full bg-gray-100 dark:bg-slate-700 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold hover:bg-blue-400 hover:text-white transition-all active:scale-95 text-sm">Đặt
+                        lịch hẹn</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 pt-16 sm:pt-24 pb-12 px-4 border-t border-primary/5">
+        <div
+            class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 sm:gap-16 mb-16 sm:mb-20 text-center md:text-left">
+            <div class="col-span-1 md:col-span-2 space-y-6">
+                <h3
+                    class="text-2xl sm:text-3xl font-black text-primary flex items-center justify-center md:justify-start gap-3 uppercase">
+                    <i class="ph-fill ph-graduation-cap"></i> Số 1 Phù Cát
+                </h3>
+                <p
+                    class="text-gray-500 dark:text-gray-400 max-w-sm text-base sm:text-lg leading-relaxed italic mx-auto md:mx-0">
+                    "Tương lai thuộc về những ai tin vào vẻ đẹp của ước mơ học tập."
+                </p>
+                <div
+                    class="inline-block bg-primary/10 px-5 py-2 rounded-xl text-primary font-black text-[10px] uppercase tracking-widest border border-primary/10">
+                    Tác giả: Tập thể H6 - PC1
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h4 class="font-black text-slate-800 dark:text-white uppercase text-[11px] tracking-widest">Dự án</h4>
+                <div class="flex items-center justify-center md:justify-start gap-4">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-cute-pink dark:bg-pink-900/30 flex items-center justify-center text-primary shadow-sm shrink-0">
+                        <i class="ph-fill ph-users-three text-xl"></i>
+                    </div>
+                    <span class="font-bold text-gray-500 dark:text-gray-400 text-sm">Tập thể H6 - 10A6</span>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h4 class="font-black text-slate-800 dark:text-white uppercase text-[11px] tracking-widest">Cố vấn</h4>
+                <div
+                    class="p-5 glass-card rounded-2xl border-primary/10 border flex items-center gap-4 mx-auto md:mx-0 max-w-[240px]">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-cute-blue dark:bg-blue-900/30 flex items-center justify-center text-teal-600 shrink-0">
+                        <i class="ph-fill ph-chalkboard-teacher text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-black text-xs dark:text-gray-100">Cô Trần Thị Thanh Vân</p>
+                        <p class="text-[9px] text-gray-400 font-black uppercase tracking-tighter">GV Chủ Nhiệm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="border-t border-primary/5 pt-10 text-center text-gray-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em]">
+            <p>THPT SỐ 1 PHÙ CÁT - GIA LAI</p>
+            <p class="mt-3 opacity-50">H6 - Lễ hội công nghệ &copy; 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Gemini AI Configuration ---
+        const apiKey = "AIzaSyC4wZ_KL758BF-JOVGMfKdVvVePY_eYwgE"; // API Key handled by environment
+        const AI_MODEL = "gemini-2.5-flash-preview-09-2025";
+
+        async function callGemini(prompt) {
+            const systemPrompt = `Bạn là H6 - Chatbot, trợ lý AI chính thức của dự án H6–PC1 (THPT Số 1 Phù Cát). Cậu được sáng tạo bởi tập thể lớp 10A6.
+            Xưng hô: "tớ - cậu". Thân thiện, ấm áp, như một người bạn thân. 
+            Mục tiêu: Lắng nghe stress, lập lộ trình học tập, tư vấn phương pháp học (Pomodoro, Cornell...). 
+            Nguyên tắc: Không giáo điều, thấu cảm trước khi đưa giải pháp.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=${apiKey}`;
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error('API Error');
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "Tớ đang 'đơ' một tẹo, cậu hỏi lại sau vài giây nhé!";
+                } catch (error) {
+                    if (i === 4) throw error;
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                }
+            }
+        }
+
+        async function askAI(predefinedText = null) {
+            const inputEl = document.getElementById('ai-input');
+            const responseContainer = document.getElementById('ai-response-container');
+            const responseEl = document.getElementById('ai-response');
+            const sendBtn = document.getElementById('send-btn');
+
+            const query = predefinedText || inputEl.value.trim();
+            if (!query) return;
+
+            inputEl.value = "";
+            responseContainer.classList.remove('hidden');
+            responseEl.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="ph-bold ph-circle-notch animate-spin text-primary"></i>
+                    <span class="animate-pulse italic font-bold">Tớ đang suy nghĩ cùng cậu...</span>
+                </div>
+            `;
+            sendBtn.disabled = true;
+
+            try {
+                const text = await callGemini(query);
+                const formattedText = text
+                    .replace(/\n/g, '<br>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary font-black">$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em class="opacity-90 italic">$1</em>');
+                responseEl.innerHTML = formattedText;
+                responseEl.scrollTop = responseEl.scrollHeight;
+            } catch (error) {
+                responseEl.innerHTML = "Mạng yếu quá, tớ chưa nghe rõ. Cậu hỏi lại nha!";
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+
+        // --- Keyboard Support: Enter to send ---
+        document.getElementById('ai-input').addEventListener('keydown', function (e) {
+            // Check if Enter is pressed and Shift is NOT pressed
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent default newline behavior
+                askAI(); // Call send function
+            }
+        });
+
+        function toggleAIHub() {
+            const modal = document.getElementById('ai-hub-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // --- Theme & Navbar Logic ---
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+        window.onscroll = function () {
+            const nav = document.getElementById('navbar');
+            if (window.pageYOffset > 50) nav.querySelector('div').classList.add('nav-scrolled');
+            else nav.querySelector('div').classList.remove('nav-scrolled');
+        };
+
+        // --- Music Player Logic ---
+        var player;
+        var isPlaying = false;
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: 'uHu0T5WyXWQ',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'uHu0T5WyXWQ' }
+            });
+        }
+        function toggleMusic() {
+            const btn = document.getElementById('music-toggle');
+            const iconPlay = document.getElementById('icon-play');
+            const iconPause = document.getElementById('icon-pause');
+            const vinyl = document.getElementById('vinyl');
+
+            if (!isPlaying) {
+                if (player) player.playVideo();
+                isPlaying = true;
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+                vinyl.classList.remove('hidden');
+                vinyl.classList.add('animate-spin-slow');
+                btn.classList.add('ring-4', 'ring-primary/30');
+            } else {
+                if (player) player.pauseVideo();
+                isPlaying = false;
+                iconPlay.classList.remove('hidden');
+                iconPause.classList.add('hidden');
+                vinyl.classList.add('hidden');
+                vinyl.classList.remove('animate-spin-slow');
+                btn.classList.remove('ring-4', 'ring-primary/30');
+            }
+        }
+    </script>
+</body>
+
+</html>

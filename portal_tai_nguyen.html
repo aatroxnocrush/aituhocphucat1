@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kho Tài Nguyên | Tự Học THPT Số 1 Phù Cát</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        'cute-pink': '#FFE5E5',
+                        'cute-purple': '#E0CCFF',
+                        'cute-blue': '#D4F0F0',
+                        'cute-yellow': '#FFF5CC',
+                        'primary': '#FF9999',
+                        'dark-text': '#5A4A4A',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-15px) rotate(1deg)' },
+                        }
+                    },
+                    screens: {
+                        'xs': '380px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            scrollbar-width: thin;
+            scrollbar-color: #FF9999 transparent;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #FF9999;
+            border-radius: 10px;
+        }
+
+        html.dark body {
+            background-color: #0f172a;
+            color: #F3F4F6;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 24px -2px rgba(255, 153, 153, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        html.dark .blob {
+            opacity: 0.1;
+        }
+
+        .resource-card {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .resource-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        @media (min-width: 1024px) {
+            .resource-card:hover::after {
+                transform: translateX(100%);
+            }
+
+            .resource-card:hover {
+                transform: translateY(-5px);
+                border-color: #FF9999;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.5s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .nav-compact {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            border-radius: 1.25rem !important;
+            margin-top: 0.25rem !important;
+        }
+
+        html.dark .nav-compact {
+            background: rgba(15, 23, 42, 0.9) !important;
+        }
+    </style>
+</head>
+
+<body class="text-dark-text dark:text-gray-100 min-h-screen">
+
+    <!-- Ambient Background -->
+    <div
+        class="blob bg-cute-pink w-48 h-48 sm:w-[500px] sm:h-[500px] rounded-full -top-12 -left-12 sm:-top-48 sm:-left-24 animate-float">
+    </div>
+    <div
+        class="blob bg-cute-blue w-40 h-40 sm:w-[400px] sm:h-[400px] rounded-full top-1/2 -right-12 sm:-right-24 animate-pulse-slow">
+    </div>
+    <div class="blob bg-cute-purple w-32 h-32 sm:w-[300px] sm:h-[300px] rounded-full bottom-0 left-1/4 animate-float">
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 p-2 sm:p-4 transition-all duration-300" id="navbar">
+        <div
+            class="max-w-6xl mx-auto glass-card rounded-2xl sm:rounded-3xl px-3 sm:px-6 py-3 sm:py-4 flex justify-between items-center relative overflow-hidden">
+            <!-- Left: Back Button -->
+            <a href="index.html" class="group flex items-center gap-2 text-primary font-bold z-10">
+                <div
+                    class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                    <i class="ph-bold ph-arrow-left text-lg"></i>
+                </div>
+                <span class="hidden md:inline">Về trang chủ</span>
+            </a>
+
+            <!-- Center: Title -->
+            <div class="flex items-center gap-1.5 sm:gap-2 absolute left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <i class="ph-fill ph-sparkle text-primary animate-pulse text-sm sm:text-base"></i>
+                <span class="font-bold text-sm sm:text-xl tracking-tight uppercase sm:normal-case">Kho Tài Nguyên</span>
+            </div>
+
+            <!-- Right: Badge -->
+            <div class="flex items-center gap-2 z-10">
+                <div
+                    class="bg-primary/10 text-primary p-2 sm:px-3 sm:py-1 rounded-xl sm:rounded-full text-[10px] font-bold flex items-center gap-1">
+                    <i class="ph-fill ph-shield-check text-sm"></i>
+                    <span class="hidden sm:inline">Verified</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-28 sm:pt-48 pb-10 sm:pb-16 px-4 text-center relative">
+        <div class="max-w-4xl mx-auto reveal active">
+            <span
+                class="inline-block bg-white dark:bg-slate-800 text-primary text-[9px] sm:text-xs font-black px-3 py-1.5 rounded-full shadow-sm mb-4 sm:mb-6 uppercase tracking-widest border border-primary/10">THPT
+                Số 1 Phù Cát</span>
+            <h1
+                class="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-4 sm:mb-6 text-slate-800 dark:text-white leading-[1.2] sm:leading-tight">
+                Cổng <span class="text-primary italic">Tri Thức</span><br>Số 1 Phù Cát
+            </h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Hội tụ những tinh hoa tự học, giúp bạn làm chủ kiến thức trong kỷ nguyên số.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 pb-20 sm:pb-32 space-y-16 sm:space-y-24">
+
+        <!-- Section 1: Kênh Youtube Học Tập (Tiếng Việt) -->
+        <section class="reveal">
+            <div class="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 bg-red-500 text-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-red-200 dark:shadow-none shrink-0">
+                    <i class="ph-fill ph-youtube-logo text-2xl sm:text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-3xl font-bold dark:text-white">Video Bài Giảng (VN)</h2>
+                    <p class="text-gray-400 text-[10px] sm:text-sm">Học qua hình ảnh sống động từ các giáo viên nổi
+                        tiếng</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+                <!-- Youtube Toán -->
+                <a href="https://www.youtube.com/c/hothucthuanofficial" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+                    <div class="flex items-start justify-between mb-5">
+                        <div
+                            class="w-11 h-11 sm:w-14 sm:h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                            <i class="ph-duotone ph-function text-2xl sm:text-3xl"></i>
+                        </div>
+                        <span
+                            class="bg-blue-50 dark:bg-blue-900 text-[9px] font-bold px-2 py-1 rounded-lg text-blue-600 uppercase">Toán</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 dark:text-white">Thầy Hồ Thức Thuận</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Luyện thi Toán trắc
+                        nghiệm chi tiết, giải đề thần tốc.</p>
+                </a>
+
+                <!-- Youtube Lý -->
+                <a href="https://www.youtube.com/@thayvnachuyenluyenthivatly" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+                    <div class="flex items-start justify-between mb-5">
+                        <div
+                            class="w-11 h-11 sm:w-14 sm:h-14 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                            <i class="ph-duotone ph-lightning text-2xl sm:text-3xl"></i>
+                        </div>
+                        <span
+                            class="bg-indigo-100 dark:bg-indigo-900 text-[9px] font-bold px-2 py-1 rounded-lg text-indigo-600 uppercase">Vật
+                            Lý</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 dark:text-white">Thầy Vũ Ngọc Anh</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Hệ thống Vật lý bản
+                        chất, giải mã hiện tượng khó.</p>
+                </a>
+
+                <!-- Youtube Hóa -->
+                <a href="https://www.youtube.com/@TYHH" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+                    <div class="flex items-start justify-between mb-5">
+                        <div
+                            class="w-11 h-11 sm:w-14 sm:h-14 bg-orange-100 dark:bg-orange-900/30 text-orange-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                            <i class="ph-duotone ph-test-tube text-2xl sm:text-3xl"></i>
+                        </div>
+                        <span
+                            class="bg-orange-50 dark:bg-orange-900 text-[9px] font-bold px-2 py-1 rounded-lg text-orange-600 uppercase">Hóa
+                            học</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 dark:text-white">Tôi Yêu Hóa Học</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Ôn luyện lý thuyết và
+                        bài tập Hóa học tỉ mỉ.</p>
+                </a>
+
+                <!-- Youtube Sinh -->
+                <a href="https://www.youtube.com/@thayphankhacnghe" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+                    <div class="flex items-start justify-between mb-5">
+                        <div
+                            class="w-11 h-11 sm:w-14 sm:h-14 bg-green-100 dark:bg-green-900/30 text-green-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                            <i class="ph-duotone ph-plant text-2xl sm:text-3xl"></i>
+                        </div>
+                        <span
+                            class="bg-green-50 dark:bg-green-900 text-[9px] font-bold px-2 py-1 rounded-lg text-green-600 uppercase">Sinh
+                            học</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 dark:text-white">Thầy Phan Khắc Nghệ</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Chuyên gia luyện thi
+                        Sinh học với tư duy độc đáo.</p>
+                </a>
+
+                <!-- Youtube Anh -->
+                <a href="https://www.youtube.com/@MsHoaGiaoTiep" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+                    <div class="flex items-start justify-between mb-5">
+                        <div
+                            class="w-11 h-11 sm:w-14 sm:h-14 bg-pink-100 dark:bg-pink-900/30 text-pink-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                            <i class="ph-duotone ph-chat-circle-text text-2xl sm:text-3xl"></i>
+                        </div>
+                        <span
+                            class="bg-pink-50 dark:bg-pink-900 text-[9px] font-bold px-2 py-1 rounded-lg text-pink-600 uppercase">Tiếng
+                            Anh</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 dark:text-white">Ms Hoa Giao Tiếp</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Học tiếng Anh vui vẻ,
+                        dễ nhớ và thực tế.</p>
+                </a>
+
+                <!-- Youtube Kỹ năng -->
+                <a href="https://www.youtube.com/@KhánhVyOFFICIAL" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+                    <div class="flex items-start justify-between mb-5">
+                        <div
+                            class="w-11 h-11 sm:w-14 sm:h-14 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                            <i class="ph-duotone ph-star text-2xl sm:text-3xl"></i>
+                        </div>
+                        <span
+                            class="bg-yellow-50 dark:bg-yellow-900 text-[9px] font-bold px-2 py-1 rounded-lg text-yellow-600 uppercase">Kỹ
+                            năng</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 dark:text-white">Khánh Vy OFFICIAL</h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm leading-relaxed">Bí quyết học ngoại
+                        ngữ và quản lý cuộc sống.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 2: Tài Nguyên Học Tập Quốc Tế -->
+        <section class="reveal">
+            <div class="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 bg-primary text-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-pink-200 dark:shadow-none shrink-0">
+                    <i class="ph-fill ph-globe-hemisphere-west text-2xl sm:text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-3xl font-bold dark:text-white">Nguồn Học Quốc Tế</h2>
+                    <p class="text-gray-400 text-[10px] sm:text-sm">Tiếp cận tri thức chuẩn toàn cầu (English Sources)
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- eStudyMe -->
+                <a href="https://estudyme.com/" target="_blank"
+                    class="resource-card glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl flex-row items-center gap-4 sm:gap-5">
+                    <div
+                        class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 bg-cute-pink dark:bg-pink-900/30 text-primary rounded-xl sm:rounded-2xl flex items-center justify-center">
+                        <i class="ph-duotone ph-translate text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold dark:text-white text-sm sm:text-base truncate">eStudyMe</h3>
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">Luyện English mỗi
+                            ngày</p>
+                    </div>
+                </a>
+
+                <!-- Khan Academy -->
+                <a href="https://www.khanacademy.org/math" target="_blank"
+                    class="resource-card glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl flex-row items-center gap-4 sm:gap-5">
+                    <div
+                        class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 bg-cute-blue dark:bg-blue-900/30 text-blue-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                        <i class="ph-duotone ph-calculator text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold dark:text-white text-sm sm:text-base truncate">Khan Academy</h3>
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">Toán học quốc tế</p>
+                    </div>
+                </a>
+
+                <!-- LibreTexts -->
+                <a href="https://chem.libretexts.org/" target="_blank"
+                    class="resource-card glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl flex-row items-center gap-4 sm:gap-5">
+                    <div
+                        class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 bg-cute-yellow dark:bg-yellow-900/30 text-orange-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                        <i class="ph-duotone ph-flask text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold dark:text-white text-sm sm:text-base truncate">LibreTexts</h3>
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">Thư viện Hóa học mở
+                        </p>
+                    </div>
+                </a>
+
+                <!-- Study.com -->
+                <a href="https://study.com/learn/physics.html" target="_blank"
+                    class="resource-card glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl flex-row items-center gap-4 sm:gap-5">
+                    <div
+                        class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                        <i class="ph-duotone ph-atom text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold dark:text-white text-sm sm:text-base truncate">Study.com</h3>
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">Vật lý trực quan</p>
+                    </div>
+                </a>
+
+                <!-- Biology Online -->
+                <a href="https://www.biologyonline.com/" target="_blank"
+                    class="resource-card glass-card p-4 sm:p-6 rounded-2xl sm:rounded-3xl flex-row items-center gap-4 sm:gap-5">
+                    <div
+                        class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 bg-green-100 dark:bg-green-900/30 text-green-500 rounded-xl sm:rounded-2xl flex items-center justify-center">
+                        <i class="ph-duotone ph-dna text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="font-bold dark:text-white text-sm sm:text-base truncate">Biology Online</h3>
+                        <p class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">Thế giới sinh vật
+                            học</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 3: Thư Viện Tài Liệu Việt Nam -->
+        <section class="reveal">
+            <div class="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
+                <div
+                    class="w-12 h-12 sm:w-14 sm:h-14 bg-teal-500 text-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-teal-200 dark:shadow-none shrink-0">
+                    <i class="ph-fill ph-books text-2xl sm:text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-3xl font-bold dark:text-white">Thư Viện Tài Liệu VN</h2>
+                    <p class="text-gray-400 text-[10px] sm:text-sm">Học liệu bám sát chương trình GDPT Việt Nam</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
+                <!-- Studocu -->
+                <a href="https://www.studocu.vn/vn" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-8 rounded-3xl">
+                    <div class="flex items-center gap-4 sm:gap-6 mb-4">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-file-pdf text-3xl sm:text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-bold dark:text-white">Studocu VN</h3>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">Kho tài liệu, đề
+                        thi và bài giảng cộng đồng đa dạng nhất hiện nay.</p>
+                </a>
+
+                <!-- VietJack -->
+                <a href="https://vietjack.com/" target="_blank" class="resource-card glass-card p-5 sm:p-8 rounded-3xl">
+                    <div class="flex items-center gap-4 sm:gap-6 mb-4">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-chalkboard-teacher text-3xl sm:text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-bold dark:text-white">VietJack</h3>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">Lời giải chi tiết
+                        các môn học và hệ thống tóm tắt SGK mới cực hay.</p>
+                </a>
+
+                <!-- Hoc10 -->
+                <a href="https://hoc10.vn" target="_blank" class="resource-card glass-card p-5 sm:p-8 rounded-3xl">
+                    <div class="flex items-center gap-4 sm:gap-6 mb-4">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 bg-orange-50 dark:bg-orange-900/20 text-orange-600 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-monitor text-3xl sm:text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-bold dark:text-white">Hoc10.vn</h3>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">Sách giáo khoa điện
+                        tử và học liệu số 4.0 hiện đại.</p>
+                </a>
+
+                <!-- Lời Giải Hay -->
+                <a href="https://loigiaihay.com/" target="_blank"
+                    class="resource-card glass-card p-5 sm:p-8 rounded-3xl">
+                    <div class="flex items-center gap-4 sm:gap-6 mb-4">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 bg-teal-50 dark:bg-teal-900/20 text-teal-600 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-lightbulb text-3xl sm:text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-bold dark:text-white">Lời Giải Hay</h3>
+                    </div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">Giải bài tập về nhà
+                        đầy đủ và nhanh chóng cho mọi cấp học.</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating UI Controls -->
+    <div id="youtube-player" class="hidden"></div>
+
+    <!-- Music Button -->
+    <div class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50">
+        <button id="music-toggle" onclick="toggleMusic()"
+            class="group relative w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center text-primary border-2 border-white dark:border-slate-700 transition-all active:scale-90">
+            <i id="icon-play" class="ph-fill ph-play text-xl ml-0.5"></i>
+            <i id="icon-pause" class="ph-fill ph-pause text-xl hidden"></i>
+            <div id="vinyl" class="absolute inset-0 border-2 border-dashed border-primary/30 rounded-2xl hidden"></div>
+        </button>
+    </div>
+
+    <!-- Theme Button -->
+    <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+        <button onclick="toggleTheme()"
+            class="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center text-yellow-500 border-2 border-white dark:border-slate-700 transition-all active:scale-90">
+            <i class="ph-fill ph-sun text-xl dark:hidden"></i>
+            <i class="ph-fill ph-moon text-xl text-blue-300 hidden dark:block"></i>
+        </button>
+    </div>
+
+    <footer class="text-center py-12 border-t border-primary/5 dark:border-white/5 bg-white/40 dark:bg-slate-900/40">
+        <div class="flex justify-center items-center gap-2 mb-3">
+            <i class="ph-fill ph-student text-xl text-primary"></i>
+            <span class="font-bold text-slate-800 dark:text-white text-sm sm:text-base">THPT Số 1 Phù Cát</span>
+        </div>
+        <p class="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 font-medium px-6 leading-relaxed">H6 - Lễ hội
+            công nghệ & Tự học sáng tạo trong kỷ nguyên số</p>
+    </footer>
+
+    <script>
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Navbar Scroll Behavior
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            const innerNav = navbar.querySelector('div');
+            if (window.scrollY > 20) {
+                innerNav.classList.add('nav-compact', 'shadow-lg');
+            } else {
+                innerNav.classList.remove('nav-compact', 'shadow-lg');
+            }
+        });
+
+        // Theme Toggle
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // YouTube Player Logic
+        var player;
+        var isPlaying = false;
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: 'uHu0T5WyXWQ',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'uHu0T5WyXWQ' }
+            });
+        }
+
+        function toggleMusic() {
+            const iconPlay = document.getElementById('icon-play');
+            const iconPause = document.getElementById('icon-pause');
+            const vinyl = document.getElementById('vinyl');
+
+            if (!isPlaying) {
+                player.playVideo();
+                isPlaying = true;
+                iconPlay.classList.add('hidden');
+                iconPause.classList.remove('hidden');
+                vinyl.classList.remove('hidden');
+                vinyl.classList.add('animate-spin-slow');
+            } else {
+                player.pauseVideo();
+                isPlaying = false;
+                iconPlay.classList.remove('hidden');
+                iconPause.classList.add('hidden');
+                vinyl.classList.add('hidden');
+                vinyl.classList.remove('animate-spin-slow');
+            }
+        }
+    </script>
+</body>
+
+</html>

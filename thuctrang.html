@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thực Trạng - Tự Học THPT Số 1 Phù Cát</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                    },
+                    colors: {
+                        'cute-pink': '#FFE5E5',
+                        'cute-purple': '#E0CCFF',
+                        'cute-blue': '#D4F0F0',
+                        'cute-yellow': '#FFF5CC',
+                        'primary': '#FF9999',
+                        'dark-text': '#5A4A4A',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(2deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #5A4A4A;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        html.dark body {
+            background-color: #0f172a;
+            color: #F3F4F6;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(255, 153, 153, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        html.dark .blob {
+            opacity: 0.2;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Nút chuyển đổi theme */
+        .theme-btn {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen pb-20">
+
+    <!-- Background Decoration -->
+    <div class="blob bg-cute-yellow w-[500px] h-[500px] rounded-full top-[-100px] left-[-150px] animate-float"></div>
+    <div class="blob bg-cute-pink w-[400px] h-[400px] rounded-full bottom-20 right-[-100px] animate-pulse-slow"></div>
+
+    <!-- Theme Toggle Button (Cố định góc dưới bên phải) -->
+    <button onclick="toggleTheme()"
+        class="theme-btn fixed bottom-8 right-8 z-[60] bg-white dark:bg-slate-800 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-yellow-500 border-4 border-white dark:border-slate-700 active:scale-95">
+        <svg class="dark:hidden" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+            viewBox="0 0 256 256">
+            <path
+                d="M128,56a72,72,0,1,0,72,72A72.08,72.08,0,0,0,128,56Zm0,128a56,56,0,1,1,56-56A56.06,56.06,0,0,1,128,184ZM128,40a8,8,0,0,1,8-8V16a8,8,0,0,1,16,0V32a8,8,0,0,1,8,8ZM128,216a8,8,0,0,1,8,8v16a8,8,0,0,1,16,0V224a8,8,0,0,1,8,8ZM240,128a8,8,0,0,1-8,8H216a8,8,0,0,1,0-16h16a8,8,0,0,1,8,8ZM56,128a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16H48a8,8,0,0,1,8,8Z">
+            </path>
+        </svg>
+        <svg class="hidden dark:block text-blue-300" xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+            fill="currentColor" viewBox="0 0 256 256">
+            <path
+                d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.11,104.11,0,1,0,129.8,129.8A8,8,0,0,0,233.54,142.23ZM128,216a88.1,88.1,0,0,1-88-88,88,88,0,0,1,51.84-80.14,104.13,104.13,0,0,0,116.3,116.3A88.1,88.1,0,0,1,128,216Z">
+            </path>
+        </svg>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="p-6 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center glass-card px-6 py-3 rounded-full">
+            <a href="index.html"
+                class="flex items-center gap-2 text-gray-500 dark:text-gray-300 hover:text-primary transition-colors font-bold group">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"
+                    class="group-hover:-translate-x-1 transition-transform">
+                    <path
+                        d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z">
+                    </path>
+                </svg>
+                Trang chủ
+            </a>
+            <div class="font-bold text-lg text-primary flex items-center gap-2 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                    viewBox="0 0 256 256">
+                    <path
+                        d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM176,128a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z">
+                    </path>
+                </svg>
+                <span class="hidden xs:inline">Phân Tích Thực Trạng</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="text-center px-4 mb-16 mt-8 reveal">
+        <span
+            class="inline-block bg-white dark:bg-slate-800 text-primary text-[10px] font-black px-4 py-1.5 rounded-full shadow-sm mb-4 uppercase tracking-widest border border-primary/10">Dữ
+            liệu khảo sát 2025</span>
+        <h1 class="text-3xl md:text-5xl font-extrabold text-dark-text dark:text-white mb-6 leading-tight">
+            Thực Trạng <span class="text-primary italic">Tự Học</span> Tại<br>
+            THPT Số 1 Phù Cát
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed px-4">
+            Báo cáo chi tiết về thói quen, tâm lý và những rào cản vô hình đang ảnh hưởng đến hiệu quả học tập của học
+            sinh.
+        </p>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-6xl mx-auto px-4 space-y-8">
+
+        <!-- NEW HIGHLIGHT SECTION: Vấn đề định hướng -->
+        <div class="glass-card p-8 md:p-10 rounded-[2.5rem] reveal active">
+            <div class="grid md:grid-cols-12 gap-10 items-center">
+                <div class="md:col-span-7">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="w-14 h-14 bg-cute-yellow dark:bg-yellow-900/30 rounded-2xl flex items-center justify-center text-orange-500 shadow-inner">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                                viewBox="0 0 256 256">
+                                <path
+                                    d="M128,24a104,104,0,1,0,104,104A104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm45.66-133.66a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32-11.32l32-32A8,8,0,0,1,173.66,82.34ZM112,128a16,16,0,1,1,16,16A16,16,0,0,1,112,128Z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-bold dark:text-white">Khủng Hoảng <span
+                                class="text-orange-500">Định Hướng</span></h2>
+                    </div>
+
+                    <div class="space-y-4 text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                        <p>
+                            Qua khảo sát thực tế, một bộ phận lớn học sinh tại trường đang rơi vào tình trạng <span
+                                class="font-bold text-dark-text dark:text-white underline decoration-cute-yellow decoration-4">thiếu
+                                mục đích học tập cụ thể</span>.
+                        </p>
+                        <p class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-2xl border-l-4 border-orange-400">
+                            Đặc biệt là các em <strong>học sinh lớp 10</strong>, khi vừa bước chân vào môi trường mới
+                            với chương trình GDPT 2018 đầy bỡ ngỡ. Sự thay đổi đột ngột về phương pháp giảng dạy và đánh
+                            giá khiến nhiều em bị "ngợp", dẫn đến tâm lý hoang mang.
+                        </p>
+                        <p>
+                            Khi không biết mình học để làm gì, việc học trở nên đối phó, nhàm chán và <span
+                                class="text-red-500 font-bold">mất dần hứng thú</span>. Đây chính là "nút thắt" lớn nhất
+                            khiến năng lực tự học không thể phát huy.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="md:col-span-5 relative group">
+                    <div
+                        class="absolute inset-0 bg-primary opacity-10 rounded-3xl blur-2xl group-hover:opacity-20 transition-opacity">
+                    </div>
+                    <div
+                        class="relative bg-white dark:bg-slate-800 p-8 rounded-[2rem] border-2 border-dashed border-orange-200 dark:border-orange-900/50 text-center">
+                        <div class="text-6xl mb-4">🌪️</div>
+                        <h3 class="font-bold text-xl mb-2 dark:text-white">Hệ lụy trực tiếp</h3>
+                        <div class="space-y-3 text-left max-w-[200px] mx-auto">
+                            <div class="flex items-center gap-3 text-sm bg-gray-50 dark:bg-slate-700/50 p-3 rounded-xl">
+                                <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                                <span>Mất lửa học tập</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm bg-gray-50 dark:bg-slate-700/50 p-3 rounded-xl">
+                                <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                                <span>Học tập thụ động</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm bg-gray-50 dark:bg-slate-700/50 p-3 rounded-xl">
+                                <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                                <span>Dễ bị xao nhãng</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Rào Cản Card -->
+            <div class="glass-card p-8 rounded-[2.5rem] reveal">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-xl font-bold flex items-center gap-3 dark:text-white">
+                        <span
+                            class="w-10 h-10 bg-cute-pink dark:bg-pink-900/30 rounded-xl flex items-center justify-center text-primary shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                viewBox="0 0 256 256">
+                                <path
+                                    d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM128,80a8,8,0,0,1,8,8v40a8,8,0,0,1-16,0V88A8,8,0,0,1,128,80Zm0,88a12,12,0,1,1,12-12A12,12,0,0,1,128,168Z">
+                                </path>
+                            </svg>
+                        </span>
+                        Rào Cản Vô Hình
+                    </h2>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2 font-bold text-gray-600 dark:text-gray-300">
+                            <span>Thiếu lộ trình chuẩn</span>
+                            <span class="text-primary">54%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-3 overflow-hidden shadow-inner">
+                            <div class="bg-gradient-to-r from-primary to-pink-300 h-full rounded-full"
+                                style="width: 54%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2 font-bold text-gray-600 dark:text-gray-300">
+                            <span>Áp lực đồng trang lứa</span>
+                            <span class="text-purple-500">27%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-3 overflow-hidden shadow-inner">
+                            <div class="bg-gradient-to-r from-purple-400 to-purple-300 h-full rounded-full"
+                                style="width: 27%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2 font-bold text-gray-600 dark:text-gray-300">
+                            <span>Môi trường chưa tối ưu</span>
+                            <span class="text-orange-500">19%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-3 overflow-hidden shadow-inner">
+                            <div class="bg-gradient-to-r from-orange-400 to-orange-300 h-full rounded-full"
+                                style="width: 19%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thiết Bị Card -->
+            <div class="glass-card p-8 rounded-[2.5rem] reveal flex flex-col justify-center">
+                <div class="text-center mb-8">
+                    <h3 class="font-bold text-xl dark:text-white">Thiết Bị Số Đã Sẵn Sàng</h3>
+                    <p class="text-gray-500 text-sm mt-1">Nền tảng công nghệ tại THPT Số 1 Phù Cát</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div
+                        class="bg-cute-purple/30 dark:bg-purple-900/20 p-6 rounded-3xl text-center border border-white/50 dark:border-purple-800/30 transition-colors">
+                        <div class="text-3xl font-extrabold text-purple-600 dark:text-purple-400 mb-1">46.7%</div>
+                        <div class="text-[10px] font-bold text-purple-500 uppercase tracking-tighter">Máy tính / Laptop
+                        </div>
+                    </div>
+                    <div
+                        class="bg-cute-blue/40 dark:bg-blue-900/20 p-6 rounded-3xl text-center border border-white/50 dark:border-blue-800/30 transition-colors">
+                        <div class="text-3xl font-extrabold text-teal-600 dark:text-teal-400 mb-1">26.7%</div>
+                        <div class="text-[10px] font-bold text-teal-500 uppercase tracking-tighter">Điện thoại / Apps
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center text-gray-500 dark:text-gray-400 text-sm mt-6 px-4">
+                    <i class="italic">"Vấn đề không nằm ở công cụ, mà nằm ở cách chúng ta định hướng để sử dụng chúng
+                        hiệu quả."</i>
+                </p>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div
+            class="bg-gradient-to-br from-primary to-pink-500 p-10 rounded-[3rem] text-white text-center shadow-2xl relative overflow-hidden reveal">
+            <!-- Decorative SVG -->
+            <svg class="absolute top-0 left-0 opacity-10" width="200" height="200" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none" />
+            </svg>
+
+            <div class="relative z-10">
+                <h2 class="text-3xl font-bold mb-6">Thông Điệp Kết Luận</h2>
+                <p class="text-white/90 text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed font-medium">
+                    "Học sinh THPT Số 1 Phù Cát có tiềm lực công nghệ mạnh mẽ. Điều các em cần ngay lúc này là một
+                    <strong>kim chỉ nam định hướng</strong> rõ ràng để thắp lại ngọn lửa hứng thú và làm chủ hành trình
+                    tri thức của chính mình."
+                </p>
+                <a href="index.html#solutions"
+                    class="inline-flex items-center gap-3 bg-white text-primary px-10 py-4 rounded-full font-bold shadow-xl hover:bg-gray-100 hover:-translate-y-1 transition-all">
+                    Khám Phá Giải Pháp <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        fill="currentColor" viewBox="0 0 256 256">
+                        <path
+                            d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L204.69,128,138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Simple -->
+    <footer class="text-center mt-16 text-gray-400 dark:text-gray-600 text-sm px-4 pb-10">
+        <p class="font-bold text-gray-500 dark:text-gray-400">THPT Số 1 Phù Cát</p>
+        <p class="mt-1">H6 - Lễ hội công nghệ</p>
+    </footer>
+
+    <script>
+        // --- 1. Dark Mode Logic ---
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // --- 2. Scroll Reveal Animation ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
